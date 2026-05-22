@@ -1,0 +1,11 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?title
+WHERE {
+    ?film a dbo:Film .
+    ?film rdfs:label ?title .
+    FILTER(regex(str(?title), "{sparql_param}", "i"))
+    FILTER(lang(?title) = "en")
+}
+LIMIT 10

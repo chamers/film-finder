@@ -1,0 +1,39 @@
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?title ?runtime ?directorLabel ?countryLabel ?filmNumber
+WHERE {
+    ?film a dbo:Film .
+    ?film rdfs:label ?title .
+
+    FILTER(regex(str(?title), "{sparql_param}", "i"))
+    FILTER(lang(?title) = "en")
+
+    OPTIONAL {
+        ?film dbo:runtime ?runtime .
+    }
+
+    OPTIONAL {
+        ?film dbo:director ?director .
+        ?director rdfs:label ?directorLabel .
+        FILTER(lang(?directorLabel) = "en")
+    }
+
+    OPTIONAL {
+        ?film dbo:country ?country .
+        ?country rdfs:label ?countryLabel .
+        FILTER(lang(?countryLabel) = "en")
+    }
+
+    {
+        SELECT (COUNT(DISTINCT ?sFilm) AS ?filmNumber)
+        WHERE {
+            ?sFilm a dbo:Film .
+            ?sFilm rdfs:label ?sTitle .
+
+            FILTER(regex(str(?sTitle), "{sparql_param}", "i"))
+            FILTER(lang(?sTitle) = "en")
+        }
+    }
+}
+LIMIT 10
