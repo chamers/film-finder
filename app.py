@@ -1,4 +1,4 @@
-from networkx import edges
+
 import streamlit as st
 import pandas as pd
 from sparql_processor import run_sparql_query
